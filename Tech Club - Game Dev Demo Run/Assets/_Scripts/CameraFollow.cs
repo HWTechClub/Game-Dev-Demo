@@ -26,10 +26,15 @@ public class CameraFollow : MonoBehaviour
     }
     
 
-    void FixedUpdate()
+    void Update()
     {
-        transform.position = Vector2.Lerp(player.position, transform.position, 0.3f);
-        transform.position += offset;
+        Vector3 newPos = Vector2.Lerp(player.position, transform.position, 0.003f);
+
+        //This sets the bounds for the camera
+        float newX = Mathf.Clamp(newPos.x, xMinBounds, xMaxBounds);
+        float newY = Mathf.Clamp(newPos.y, yMinBounds, yMaxBounds);
+
+        transform.position = new Vector3(newX, newY, -10);
 
     }
 }
