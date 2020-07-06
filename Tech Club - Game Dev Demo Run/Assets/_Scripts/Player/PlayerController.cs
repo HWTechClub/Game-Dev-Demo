@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,16 +24,26 @@ public class PlayerController : MonoBehaviour
     //If the player is facing right. Else, they're facing left.
     [SerializeField] bool facingRight = true;
 
-    [Space (20)]
-    [Header ("Combat")]
+    [Space(20)]
+    [Header("Combat")]
+    //This is the player's maximum health. Current health can't exceed this.
+    [SerializeField] int maxHealth;
+    //This is the player's current health. If it reaches 0, the player dies. It can't exceed maxHealth.
+    [SerializeField] int currentHealth;
 
-    //This is the current weapon player is holding
-    [SerializeField] Weapon currentWeapon;
     //This is the all the weapons the player is carrying.
     [SerializeField] List<Weapon> weaponArsenal = new List<Weapon>();
+    //This is the index of the player's current weapon.
+    [SerializeField] int currentWeapon = 0;
 
     //This is where the player will attack from.
     [SerializeField] Transform attackPosition;
+
+    //This value controls when the player can attack again after attacking.
+    [SerializeField] float attackTimer;
+
+    //Whenever the player is hit, they lose control until they land.
+    [SerializeField] bool lossOfControl = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +55,8 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate ()
     {
         //This is the player's horizontal movement.
-        rb2d.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * 100 * speed * Time.fixedDeltaTime);        
+        if (!lossOfControl)
+            rb2d.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * 100 * speed * Time.fixedDeltaTime);        
 
         
     }
@@ -52,11 +64,14 @@ public class PlayerController : MonoBehaviour
     //Jump
     void Jump ()
     {
-        rb2d.velocity = new Vector2 (rb2d.velocity.x, 0);
+        if (!lossOfControl)
+        {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
 
-        rb2d.AddForce(new Vector2(0, 100 * jumpPower));
-        coyoteTime = 0;
-        jumpBuffer = 0;
+            rb2d.AddForce(new Vector2(0, 100 * jumpPower));
+            coyoteTime = 0;
+            jumpBuffer = 0;
+        }
     }
 
     // Update is called once per frame
@@ -102,10 +117,25 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-
-        if (Input.GetKeyDown(KeyCode.X) && currentWeapon != null)
+        if (attackTimer > 0)
         {
-            currentWeapon.UseWeapon(this, attackPosition.position);
+            attackTimer -= 100 * Time.deltaTime;
+            attackTimer = Mathf.Clamp(attackTimer, 0, Mathf.Infinity);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.X) && weaponArsenal.Count > 0 && attackTimer <= 0 && !lossOfControl)
+        {
+            attackTimer = weaponArsenal[currentWeapon].AttackTime;
+            weaponArsenal[currentWeapon].UseWeapon(this, attackPosition.position);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            CycleWeapon(true);
+        } else if (Input.GetKeyDown(KeyCode.S))
+        {
+            CycleWeapon(false);
         }
     }
 
@@ -147,7 +177,47 @@ public class PlayerController : MonoBehaviour
         grounded = _grounded;
 
         if (grounded)
-            coyoteTime = 25f; //Players have 0.25 second to jump after leaving the ground.
+        {
+            coyoteTime = 15f; //Players have 0.15 second to jump after leaving the ground.
+            lossOfControl = false;
+        }
+    }
+
+    //Function for picking up weapons
+    public void PickUpWeapon (Weapon weapon)
+    {
+        weaponArsenal.Add(weapon);
+    }
+
+    //This is just to allow the player to cycle between their weapons.
+    void CycleWeapon (bool right)
+    {
+        if (weaponArsenal.Count > 0) {
+            currentWeapon += right ? 1 : -1;
+            if (currentWeapon >= weaponArsenal.Count)
+                currentWeapon = 0;
+            else if (currentWeapon < 0)
+                currentWeapon = weaponArsenal.Count - 1;
+        }
+    }
+
+    public void TakeDamage (int damage, Vector2 knockbackDirection)
+    {
+        currentHealth -= damage;
+
+        lossOfControl = true;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        rb2d.AddForce(knockbackDirection * 1000);
+
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    void Die ()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //Getters and Setters
@@ -164,6 +234,14 @@ public class PlayerController : MonoBehaviour
         get
         {
             return grounded;
+        }
+    }
+
+    public float AttackTimer
+    {
+        set
+        {
+            attackTimer = value;
         }
     }
 }
