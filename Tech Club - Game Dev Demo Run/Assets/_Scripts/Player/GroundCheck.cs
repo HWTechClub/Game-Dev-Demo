@@ -5,6 +5,7 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
     [SerializeField] PlayerController controller;
+    [SerializeField] BoxCollider2D collider2D;
 
     //Checks if the player is in contact with the ground.
 
@@ -24,4 +25,15 @@ public class GroundCheck : MonoBehaviour
         }
     }
 
+    void Update ()
+    {
+        if (controller.RB2D.velocity.y != 0)
+        {
+            collider2D.size = new Vector2(0.8f, 0.1f);
+        }
+        else
+        {
+            collider2D.size = new Vector2(1, 0.1f);
+        }
+    }
 }
