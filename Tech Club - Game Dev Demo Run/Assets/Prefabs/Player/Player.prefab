@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3678051600545275814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3678051601835239092}
   m_RootOrder: 0
@@ -70,8 +70,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 2e04b16ea4a51144090e165d14b1d09f, type: 3}
-  m_Color: {r: 0.25663045, g: 0.6886792, b: 0.5949333, a: 1}
+  m_Sprite: {fileID: 21300000, guid: de39aaebce4ebc641b9332027801128f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -291,7 +291,8 @@ MonoBehaviour:
   facingRight: 1
   maxHealth: 3
   currentHealth: 3
-  weaponArsenal: []
+  weaponArsenal:
+  - {fileID: 11400000, guid: 85af785a1f6aae441bf8cc1ec2bb809a, type: 2}
   currentWeapon: 0
   attackPosition: {fileID: 3678051601115108312}
   attackTimer: 0

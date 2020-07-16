@@ -15,5 +15,5 @@ MonoBehaviour:
   layerMasks:
     serializedVersion: 2
     m_Bits: 512
-  attackTime: 50
+  attackTime: 25
   damage: 1

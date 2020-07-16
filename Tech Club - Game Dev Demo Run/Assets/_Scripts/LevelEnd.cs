@@ -10,6 +10,7 @@ public class LevelEnd : MonoBehaviour
 
     void OnTriggerEnter2D (Collider2D other)
     {
+        //If the player reaches the end, start the next level
         if (other.gameObject.tag.Equals ("Player")) {
             SceneManager.LoadSceneAsync(nextLevel);
         }

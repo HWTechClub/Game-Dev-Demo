@@ -201,6 +201,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Function for deducting health from the player
     public void TakeDamage (int damage, Vector2 knockbackDirection)
     {
         currentHealth -= damage;
@@ -215,9 +216,21 @@ public class PlayerController : MonoBehaviour
             Die();
     }
 
+    public void TakeHeal (int heal) {
+        currentHealth += heal;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+    }
+
     void Die ()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // Draw a yellow sphere at the transform's position
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(attackPosition.position, 0.75f);
     }
 
     //Getters and Setters

@@ -33,7 +33,7 @@ public class GroundCheck : MonoBehaviour
         }
         else
         {
-            collider2D.size = new Vector2(1, 0.1f);
+            collider2D.size = new Vector2(0.9f, 0.1f);
         }
     }
 }

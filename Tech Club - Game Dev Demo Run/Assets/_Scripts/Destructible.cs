@@ -21,11 +21,13 @@ public class Destructible : MonoBehaviour
 
     public void GetDestroyed (Vector2 playerPos)
     {
+        //Drops all of its contents as new instantiated objects
         foreach (GameObject drop in drops)
         {
             Instantiate(drop, transform.position, drop.transform.rotation);
         }
 
+        //Destroys this object
         Destroy(this.gameObject);
     }
 }

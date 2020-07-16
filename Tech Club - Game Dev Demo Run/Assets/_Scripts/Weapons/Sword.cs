@@ -9,14 +9,19 @@ public class Sword : Weapon
 
     public override void UseWeapon(PlayerController player, Vector3 attackPos)
     {
+        //If the player is falling, smoothen it a bit.
+        if (player.RB2D.velocity.y < 0)
+            player.RB2D.velocity = new Vector2(player.RB2D.velocity.x, 0);
         //Returns all colliders that overlap with this area.
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, 0.75f, Masks);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, .75f, Masks);
 
         foreach (Collider2D hit in hits)
         {
             if (hit.gameObject.tag.Equals ("Enemy"))
             {
-                //Do damage
+                EnemyHealth em = hit.gameObject.GetComponent<EnemyHealth>();
+                Vector2 knockback = player.gameObject.transform.position - hit.transform.position;
+                em.TakeDamage(damage, knockback);
             } else if (hit.gameObject.tag.Equals("Destructible"))
             {
                 Destructible hitDes = hit.GetComponent<Destructible>();

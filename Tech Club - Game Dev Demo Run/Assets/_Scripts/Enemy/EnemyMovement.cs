@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
 
     bool moveLeft;
 
+    //These are the x-axis bounds for the enemy's movement
     [SerializeField] float xMinBounds;
     [SerializeField] float xMaxBounds;
 
@@ -37,7 +38,6 @@ public class EnemyMovement : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw a semitransparent blue cube at the transforms position
         Gizmos.color = new Color(1, 0, 0, 1f);
         Gizmos.DrawCube(new Vector3(xMinBounds, transform.position.y), new Vector3(0.35f, 0.35f, 1));
         Gizmos.color = new Color(0, 0, 1, 1f);
