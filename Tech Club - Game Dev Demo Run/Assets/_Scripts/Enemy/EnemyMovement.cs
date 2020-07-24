@@ -66,9 +66,8 @@ public class EnemyMovement : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        PlayerController controller = other.GetComponent<PlayerController>();
-
-        if(controller != null && timer == 0)
+       
+        if(other.gameObject.tag.Equals("Player") && timer == 0)
         {
             Vector2 angle = other.gameObject.transform.position - transform.position;
 
@@ -78,8 +77,7 @@ public class EnemyMovement : MonoBehaviour
             EnemyProjectile projectile = projectileObject.GetComponent<EnemyProjectile>();
             projectile.Launch(angle.normalized, 300);
             timer = blobCooldownTime;
-        }
-            
+        }  
 
     }
 
