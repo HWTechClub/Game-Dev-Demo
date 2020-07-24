@@ -7,24 +7,14 @@ public class Destructible : MonoBehaviour
     //These are its drops
     [SerializeField] GameObject[] drops;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //When it gets struck, call this.
     public void GetDestroyed (Vector2 playerPos)
     {
         //Drops all of its contents as new instantiated objects
         foreach (GameObject drop in drops)
         {
-            Instantiate(drop, transform.position, drop.transform.rotation);
+            GameObject obj = Instantiate(drop, transform.position, drop.transform.rotation);
+            
         }
 
         //Destroys this object

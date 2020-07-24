@@ -45,6 +45,15 @@ public class PlayerController : MonoBehaviour
     //Whenever the player is hit, they lose control until they land.
     [SerializeField] bool lossOfControl = false;
 
+    //UI Manager refernce
+    [SerializeField] UIManager ui;
+
+    [Space(20)]
+    [Header("Graphics")]
+    //This is the player's animator.
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer sprite;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -137,8 +146,24 @@ public class PlayerController : MonoBehaviour
         {
             CycleWeapon(false);
         }
+
+        SetAnimationParameters();
     }
 
+    //This function sets the parameters necessary for the player's animations.
+    void SetAnimationParameters ()
+    {
+        animator.SetFloat("YVelocity", rb2d.velocity.y);
+        animator.SetBool("Run", rb2d.velocity.x < -0.5f || rb2d.velocity.x > 0.5f);
+        animator.SetBool("Grounded", grounded);
+
+        if (facingRight)
+            sprite.flipX = false;
+        else
+            sprite.flipX = true;
+    }
+
+    //This uses a switch statement to place the player's aim depending on the input.
     void SetPlayerAttackPos()
     {
 
@@ -187,6 +212,7 @@ public class PlayerController : MonoBehaviour
     public void PickUpWeapon (Weapon weapon)
     {
         weaponArsenal.Add(weapon);
+        ui.UpdateWeaponIcon(weaponArsenal[currentWeapon].Icon);
     }
 
     //This is just to allow the player to cycle between their weapons.
@@ -198,6 +224,8 @@ public class PlayerController : MonoBehaviour
                 currentWeapon = 0;
             else if (currentWeapon < 0)
                 currentWeapon = weaponArsenal.Count - 1;
+
+            ui.UpdateWeaponIcon(weaponArsenal [currentWeapon].Icon);
         }
     }
 
@@ -210,6 +238,8 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
+        ui.UpdateHealthUI(currentHealth);
+
         rb2d.AddForce(knockbackDirection * 1000);
 
         if (currentHealth <= 0)
@@ -219,18 +249,12 @@ public class PlayerController : MonoBehaviour
     public void TakeHeal (int heal) {
         currentHealth += heal;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        ui.UpdateHealthUI(currentHealth);
     }
 
     void Die ()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(attackPosition.position, 0.75f);
     }
 
     //Getters and Setters

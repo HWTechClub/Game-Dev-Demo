@@ -20,6 +20,7 @@ public class HealConsumable : MonoBehaviour
 
     void OnCollisionEnter2D (Collision2D other)
     {
+        //If the player collides with this, heal them and destroy this object.
         if (other.gameObject.tag.Equals ("Player"))
         {
             PlayerController pc = other.gameObject.GetComponent<PlayerController>();

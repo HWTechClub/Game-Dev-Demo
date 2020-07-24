@@ -16,4 +16,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackTime: 25
-  damage: 1
+  icon: {fileID: 21300000, guid: ee1e603419dcb6f4a918aeb4a31aa7be, type: 3}
+  damage: 2

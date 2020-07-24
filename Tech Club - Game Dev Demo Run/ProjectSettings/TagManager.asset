@@ -9,6 +9,7 @@ TagManager:
   - Hazard
   - Destructible
   - Consumable
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Player
   - Enemy
   - Consumable
-  - 
+  - PlayerProjectile
   - 
   - 
   - 
