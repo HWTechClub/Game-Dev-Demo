@@ -7,6 +7,13 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] Rigidbody2D rb2d; //This references the Rigidbody2D component of the enemy
 
+    [SerializeField] GameObject projectilePrefab;
+
+    private float blobCooldownTime = 2.0f;
+
+    private float timer = 0;
+
+
     bool moveLeft;
 
     //These are the x-axis bounds for the enemy's movement
@@ -20,6 +27,15 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Update is called once per frame
+    void Update()
+    {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            timer = Mathf.Clamp(timer, 0, 2.0f);
+        }
+    }
+
     void FixedUpdate()
     {
         //The enemy will continuously move left until they reach their xBounds then change directions.
@@ -45,6 +61,23 @@ public class EnemyMovement : MonoBehaviour
         Gizmos.DrawCube(new Vector3(xMinBounds, transform.position.y), new Vector3(0.35f, 0.35f, 1));
         Gizmos.color = new Color(0, 0, 1, 1f);
         Gizmos.DrawCube(new Vector3(xMaxBounds, transform.position.y), new Vector3(0.35f, 0.35f, 1));
+
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+       
+        if(other.gameObject.tag.Equals("Player") && timer == 0)
+        {
+            Vector2 angle = other.gameObject.transform.position - transform.position;
+
+            GameObject projectileObject = Instantiate(projectilePrefab, rb2d.position + angle.normalized, Quaternion.identity);
+            projectileObject.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg);
+
+            EnemyProjectile projectile = projectileObject.GetComponent<EnemyProjectile>();
+            projectile.Launch(angle.normalized, 300);
+            timer = blobCooldownTime;
+        }  
 
     }
 
