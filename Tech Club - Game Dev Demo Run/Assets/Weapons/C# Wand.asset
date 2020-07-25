@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90f226388201dda4e87498eeeaebf15a, type: 3}
-  m_Name: Test Wand
+  m_Name: C# Wand
   m_EditorClassIdentifier: 
   layerMasks:
     serializedVersion: 2
