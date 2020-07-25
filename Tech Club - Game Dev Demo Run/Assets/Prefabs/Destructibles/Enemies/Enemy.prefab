@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 5525509825910245437}
   - component: {fileID: 5525509825910245438}
   - component: {fileID: 5525509825910245442}
+  - component: {fileID: 5525509826467417349}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Enemy
@@ -178,6 +179,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 12.5
   rb2d: {fileID: 5525509825910245437}
+  projectilePrefab: {fileID: 4810266083795800336, guid: c22e40fe43b508c4fb9189fa6678653e,
+    type: 3}
   xMinBounds: 63
   xMaxBounds: 68
 --- !u!114 &5525509825910245442
@@ -195,6 +198,22 @@ MonoBehaviour:
   maxHealth: 4
   currentHealth: 4
   rb2d: {fileID: 5525509825910245437}
+--- !u!58 &5525509826467417349
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5525509825910245439}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3.75
 --- !u!1 &5525509826478697074
 GameObject:
   m_ObjectHideFlags: 0
