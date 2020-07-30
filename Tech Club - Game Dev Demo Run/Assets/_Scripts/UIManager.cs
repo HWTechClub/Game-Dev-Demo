@@ -28,7 +28,8 @@ public class UIManager : MonoBehaviour
             if (i >= currHealth)
             {
                 healthIcons[i].gameObject.SetActive(false);
-            }
+            } else
+                healthIcons[i].gameObject.SetActive(true);
         }
     }
    

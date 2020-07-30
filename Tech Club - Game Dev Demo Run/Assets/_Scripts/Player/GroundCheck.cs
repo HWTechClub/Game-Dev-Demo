@@ -29,11 +29,11 @@ public class GroundCheck : MonoBehaviour
     {
         if (controller.RB2D.velocity.y != 0)
         {
-            collider2D.size = new Vector2(0.8f, 0.1f);
+            collider2D.size = new Vector2(0.5f, 0.1f);
         }
         else
         {
-            collider2D.size = new Vector2(0.9f, 0.1f);
+            collider2D.size = new Vector2(0.65f, 0.1f);
         }
     }
 }

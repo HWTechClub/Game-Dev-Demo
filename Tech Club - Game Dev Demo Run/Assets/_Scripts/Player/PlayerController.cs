@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     //If the player presses space right before they land, they should jump just as they land.
     [SerializeField] float jumpBuffer = 0;
 
+    //This is the timer for the boost for direction change.
+    //This is used when the player suddenly chagnes directions at the peak of their jump.
+    [SerializeField] float directionChangeTime = 0;
+
     //If the player is facing right. Else, they're facing left.
     [SerializeField] bool facingRight = true;
 
@@ -65,9 +69,14 @@ public class PlayerController : MonoBehaviour
     {
         //This is the player's horizontal movement.
         if (!lossOfControl)
-            rb2d.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * 100 * speed * Time.fixedDeltaTime);        
+        {
+            if (directionChangeTime >= 0)
+                rb2d.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * 100 * speed * Time.fixedDeltaTime);
+            else
+                rb2d.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * 100 * speed * Time.fixedDeltaTime * 5f);
 
-        
+        }
+
     }
 
     //Jump
@@ -97,6 +106,9 @@ public class PlayerController : MonoBehaviour
         jumpBuffer -= 100f * Time.deltaTime;
         jumpBuffer = Mathf.Clamp(jumpBuffer, 0, 25f);
 
+        directionChangeTime -= 100f * Time.deltaTime;
+        directionChangeTime = Mathf.Clamp(directionChangeTime, 0, 50f);
+
         //To make the player jump more satisfying:
         //1) When the player is jumping the gravity on the player should be weaker.
         //2) If the player holding the space bar down while jumping, the gravity should be even weaker.
@@ -111,7 +123,13 @@ public class PlayerController : MonoBehaviour
         //We place the attackPosition of the player based on their input.
         SetPlayerAttackPos();
 
-        
+        //If the player suddenlt changes directions at the top of their jump, set the direction change timer and reduce the velocity.
+        if (!grounded && (rb2d.velocity.y > -1 || rb2d.velocity.y < 1) && (rb2d.velocity.x * Input.GetAxisRaw ("Horizontal") < 0)) {
+            directionChangeTime = 50f;
+            rb2d.velocity = new Vector2(rb2d.velocity.x * 0.5f, rb2d.velocity.y);
+        }
+
+
         //This is called on the frame the space key is pressed. 
         if (Input.GetKeyDown(KeyCode.Z))
         {

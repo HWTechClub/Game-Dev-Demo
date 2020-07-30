@@ -7,6 +7,8 @@ public class Sword : Weapon
 {
     [SerializeField] int damage;
 
+    [SerializeField] GameObject slashEffect;
+
     public override void UseWeapon(PlayerController player, Vector3 attackPos)
     {
         //If the player is falling, smoothen it a bit.
@@ -14,6 +16,12 @@ public class Sword : Weapon
             player.RB2D.velocity = new Vector2(player.RB2D.velocity.x, 0);
         //Returns all colliders that overlap with this area.
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, .75f, Masks);
+
+
+        GameObject effect = Instantiate(slashEffect, attackPos, slashEffect.transform.rotation);
+        Vector2 angle = attackPos - player.transform.position;
+        effect.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg);
+        Destroy(effect, 0.2f);
 
         foreach (Collider2D hit in hits)
         {
